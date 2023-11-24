@@ -94,6 +94,7 @@ def split_stratified_into_train_val_test(df_input, stratify_colname='y', frac_tr
     df_train, df_val, df_test :
         Dataframes containing the three splits.
     """
+    df_input = turn_dataframe_columns_consistent(df_input)
 
     if frac_train + frac_val + frac_test != 1.0:
         raise ValueError('fractions %f, %f, %f do not add up to 1.0' % (frac_train, frac_val, frac_test))
@@ -116,6 +117,11 @@ def split_stratified_into_train_val_test(df_input, stratify_colname='y', frac_tr
 
     return df_train, df_val, df_test
 
+def turn_dataframe_columns_consistent(df):
+    df['competence'] = df[['c1', 'c2', 'c3', 'c4', 'c5']].values.tolist()
+    new_df = df[['prompt', 'title', 'essay', 'competence', 'score']]
+
+    return new_df
 
 if __name__ == '__main__':
     Corpus().build_corpus('extended_essay-br.csv')
